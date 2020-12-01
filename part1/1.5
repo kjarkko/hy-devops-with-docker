@@ -1,0 +1,6 @@
+docker run -d -it --name websearch ubuntu:xenial sh -c 'echo "Input website:"; read website; echo "Searching.."; sleep 1; curl http://$website;'
+docker exec -it websearch bash
+apt update && apt install curl -y
+exit
+docker attach --sig-proxy=false websearch
+helsinki.fi
