@@ -1,0 +1,21 @@
+version: '3.5'
+
+services:
+  redis:
+    image: redis
+  backend:
+    build: 
+      dockerfile: $PWD/Dockerfile-backend
+      context: ~/Programming/backend-example-docker
+    ports:
+      - 8000:8000
+    environment:
+      - REDIS=redis
+    depends_on:
+      - redis
+  frontend:
+    build:
+      dockerfile: $PWD/Dockerfile-frontend
+      context: ~/Programming/frontend-example-docker
+    ports:
+      - 5000:5000

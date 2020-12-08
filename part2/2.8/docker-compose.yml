@@ -1,0 +1,63 @@
+version: '3.5'
+
+services:
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - frontend
+      - backend
+    ports:
+      - 80:80
+    depends_on:
+      - frontend
+      - backend
+
+  db:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=pass
+    volumes:
+      - database:/var/lib/postgresql/data
+    networks:
+      - db
+
+  redis:
+    image: redis
+    networks:
+      - redis
+
+  backend:
+    build: 
+      dockerfile: $PWD/Dockerfile-backend
+      context: ~/Programming/backend-example-docker
+    environment:
+      - REDIS=redis
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=pass
+      - DB_HOST=db
+    depends_on:
+      - redis
+      - db
+    networks:
+      - backend
+      - redis
+      - db
+
+  frontend:
+    build:
+      dockerfile: $PWD/Dockerfile-frontend
+      context: ~/Programming/frontend-example-docker
+    networks:
+      - frontend
+
+volumes:
+  database:
+
+networks:
+  frontend:
+  backend:
+  redis:
+  db:
