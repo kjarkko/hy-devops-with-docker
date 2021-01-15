@@ -1,0 +1,8 @@
+#!/bin/sh
+
+git clone https://github.com/kjarkko/frontend-example-docker.git
+cd frontend-example-docker
+docker login
+docker build -t hy-docker-3-3 .
+docker tag hy-docker-3-3 kjarkko/hy-docker-3-3
+docker push kjarkko/hy-docker-3-3
